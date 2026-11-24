@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <!-- 콘셉트 B: 잔잔한 혈당 그래프를 품은 '혈당노트' -->
+  <rect width="1080" height="1080" fill="#FFD166"/>
+  <circle cx="540" cy="560" r="400" fill="#FFE29A"/>
+
+  <!-- 반짝이 -->
+  <g fill="#FFFFFF">
+    <path d="M200 330 l14 36 36 14 -36 14 -14 36 -14 -36 -36 -14 36 -14z"/>
+    <path d="M870 760 l10 26 26 10 -26 10 -10 26 -10 -26 -26 -10 26 -10z"/>
+  </g>
+
+  <ellipse cx="540" cy="905" rx="230" ry="26" fill="#000" opacity=".12"/>
+
+  <!-- 노트 -->
+  <g transform="rotate(-4 540 560)">
+    <rect x="300" y="250" width="480" height="620" rx="56" fill="#0E5E57"/>
+    <rect x="322" y="270" width="436" height="578" rx="42" fill="#FFFFFF"/>
+    <!-- 줄 -->
+    <g stroke="#E8F1EE" stroke-width="6">
+      <line x1="350" y1="640" x2="730" y2="640"/>
+      <line x1="350" y1="710" x2="730" y2="710"/>
+      <line x1="350" y1="780" x2="730" y2="780"/>
+    </g>
+    <!-- 잔잔한 그래프 -->
+    <path d="M360 720 C 420 660 470 760 540 700 S 650 650 720 700" stroke="#0E5E57" stroke-width="22" stroke-linecap="round" fill="none"/>
+    <circle cx="720" cy="700" r="20" fill="#F2772E"/>
+    <!-- 스프링 -->
+    <g fill="#1E2928">
+      <rect x="370" y="218" width="28" height="78" rx="14"/>
+      <rect x="450" y="218" width="28" height="78" rx="14"/>
+      <rect x="530" y="218" width="28" height="78" rx="14"/>
+      <rect x="610" y="218" width="28" height="78" rx="14"/>
+      <rect x="690" y="218" width="28" height="78" rx="14"/>
+    </g>
+    <!-- 얼굴: 뿌듯한 웃는 눈 -->
+    <g stroke="#1E2928" stroke-width="16" stroke-linecap="round" fill="none">
+      <path d="M420 470 Q455 425 490 470"/>
+      <path d="M590 470 Q625 425 660 470"/>
+    </g>
+    <ellipse cx="410" cy="530" rx="36" ry="21" fill="#FF9C9C" opacity=".75"/>
+    <ellipse cx="670" cy="530" rx="36" ry="21" fill="#FF9C9C" opacity=".75"/>
+    <path d="M505 515 Q540 560 575 515" stroke="#1E2928" stroke-width="14" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- 연필 -->
+  <g transform="rotate(32 830 470)">
+    <rect x="800" y="300" width="64" height="300" rx="10" fill="#F2772E"/>
+    <rect x="800" y="300" width="21" height="300" fill="#FF9452"/>
+    <rect x="800" y="280" width="64" height="40" rx="10" fill="#FF9C9C"/>
+    <rect x="800" y="312" width="64" height="16" fill="#C9C2B6"/>
+    <path d="M800 600 L864 600 L832 670 Z" fill="#F3D9B1"/>
+    <path d="M820 644 L844 644 L832 670 Z" fill="#1E2928"/>
+  </g>
+</svg>

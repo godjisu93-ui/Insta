@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <!-- 콘셉트 C: "밥 반 공기만 주세요" 밥그릇 -->
+  <defs>
+    <clipPath id="bowl"><path d="M270 560 H810 C810 770 690 870 540 870 C390 870 270 770 270 560 Z"/></clipPath>
+  </defs>
+  <rect width="1080" height="1080" fill="#DDEFE7"/>
+  <circle cx="540" cy="580" r="400" fill="#C9E6DA"/>
+
+  <!-- 젓가락 -->
+  <g transform="rotate(28 700 420)">
+    <rect x="690" y="170" width="26" height="420" rx="13" fill="#B07A4F"/>
+    <rect x="740" y="180" width="26" height="410" rx="13" fill="#8E5E3A"/>
+  </g>
+
+  <ellipse cx="540" cy="910" rx="220" ry="24" fill="#000" opacity=".12"/>
+
+  <!-- 밥 (반 공기만 소복) -->
+  <path d="M390 566 C 400 470 680 470 690 566 Z" fill="#FFFFFF"/>
+  <g fill="#ECE6DA">
+    <ellipse cx="470" cy="525" rx="14" ry="8" transform="rotate(-20 470 525)"/>
+    <ellipse cx="560" cy="505" rx="14" ry="8" transform="rotate(15 560 505)"/>
+    <ellipse cx="630" cy="535" rx="14" ry="8" transform="rotate(-10 630 535)"/>
+    <ellipse cx="520" cy="545" rx="12" ry="7"/>
+  </g>
+
+  <!-- 그릇 -->
+  <rect x="460" y="850" width="160" height="40" rx="16" fill="#0A4742"/>
+  <path d="M270 560 H810 C810 770 690 870 540 870 C390 870 270 770 270 560 Z" fill="#FFFFFF"/>
+  <g clip-path="url(#bowl)">
+    <rect x="250" y="770" width="580" height="120" fill="#0E5E57"/>
+    <g fill="#FFD166">
+      <circle cx="380" cy="800" r="10"/><circle cx="460" cy="815" r="10"/><circle cx="540" cy="800" r="10"/>
+      <circle cx="620" cy="815" r="10"/><circle cx="700" cy="800" r="10"/>
+    </g>
+  </g>
+  <rect x="262" y="548" width="556" height="28" rx="14" fill="#0E5E57"/>
+
+  <!-- 얼굴: 윙크 -->
+  <ellipse cx="465" cy="665" rx="26" ry="33" fill="#1E2928"/>
+  <circle cx="456" cy="652" r="10" fill="#FFFFFF"/>
+  <path d="M590 668 Q620 640 650 668" stroke="#1E2928" stroke-width="15" stroke-linecap="round" fill="none"/>
+  <ellipse cx="415" cy="720" rx="34" ry="20" fill="#FF9C9C" opacity=".75"/>
+  <ellipse cx="690" cy="720" rx="34" ry="20" fill="#FF9C9C" opacity=".75"/>
+  <path d="M515 712 Q550 750 585 712" stroke="#1E2928" stroke-width="13" stroke-linecap="round" fill="none"/>
+
+  <!-- 말풍선 -->
+  <g transform="rotate(-8 290 330)">
+    <rect x="140" y="250" width="320" height="160" rx="80" fill="#F2772E"/>
+    <path d="M330 400 L380 470 L390 395 Z" fill="#F2772E"/>
+    <text x="300" y="358" text-anchor="middle" font-family="Pretendard" font-weight="900" font-size="88" fill="#FFFFFF" letter-spacing="-2">반만!</text>
+  </g>
+</svg>
