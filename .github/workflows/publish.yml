@@ -1,0 +1,89 @@
+name: 인스타그램 자동 업로드
+
+on:
+  schedule:
+    - cron: '20 22 * * *'   # 매일 07:20 KST → 카드뉴스 (GitHub 사정으로 10~30분 늦어질 수 있음)
+    - cron: '20 11 * * *'   # 매일 20:20 KST → 릴스
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: '무엇을 올릴까요?'
+        type: choice
+        options: [carousel, reel]
+        default: carousel
+      day:
+        description: 'Day 번호 (비우면 오늘 일정대로)'
+        required: false
+      dry_run:
+        description: '연습 모드 (실제로 올리지 않음)'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: instagram-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: 프로그램 설치
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: 오늘 올릴 종류 정하기
+        id: kind
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            if [ "${{ github.event.schedule }}" = "20 22 * * *" ]; then echo "kind=carousel" >> "$GITHUB_OUTPUT"; else echo "kind=reel" >> "$GITHUB_OUTPUT"; fi
+          else
+            echo "kind=${{ inputs.kind }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 이미지·영상 만들기
+        run: node scripts/publish.mjs prepare --kind ${{ steps.kind.outputs.kind }} ${{ inputs.day && format('--day {0}', inputs.day) || '' }}
+
+      - name: 공개 주소(media 브랜치)에 올리기
+        run: |
+          skip=$(node -p "require('./.media/target.json').skip")
+          [ "$skip" = "true" ] && exit 0
+          id=$(node -p "require('./.media/target.json').id")
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin media >/dev/null; then
+            git fetch -q origin media
+            git worktree add -q /tmp/media FETCH_HEAD
+            git -C /tmp/media checkout -q -B media
+          else
+            git worktree add -q --orphan -b media /tmp/media
+          fi
+          rm -rf "/tmp/media/$id" && cp -r ".media/$id" "/tmp/media/$id"
+          git -C /tmp/media add -A
+          git -C /tmp/media commit -q -m "media: $id" || true
+          git -C /tmp/media push -q origin media
+
+      - name: 인스타그램에 게시
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          MEDIA_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/media
+        run: node scripts/publish.mjs publish ${{ inputs.dry_run && '--dry-run' || '' }}
+
+      - name: 게시 기록 저장
+        run: |
+          git diff --quiet -- published.json 2>/dev/null && [ -z "$(git status --porcelain published.json)" ] && exit 0
+          git add published.json
+          git commit -q -m "게시 기록: $(node -p "const t=require('./.media/target.json');t.kind+' '+t.id")"
+          for i in 1 2 3; do git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}" && exit 0; sleep 5; done
+          exit 1

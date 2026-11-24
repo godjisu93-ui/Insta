@@ -1,3 +1,4 @@
 node_modules/
 output/
 profile/.tmp.html
+.media/

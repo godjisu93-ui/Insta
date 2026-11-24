@@ -9,6 +9,8 @@
 
 > 📘 **처음이라면 `docs/혈당노트_사용설명서.pdf`부터 보세요.** (설치 없이 쓰는 법 포함, 7쪽)
 
+> 🤖 **자동 업로드**: 매일 07:30 카드뉴스, 20:30 릴스가 GitHub Actions로 자동 게시됩니다. 설정법은 `docs/자동화_설정.md`. 일정은 `schedule.json`, 게시 기록은 `published.json`. 원고에 `"approved": false`가 있으면 올라가지 않습니다.
+
 ## 1. 처음 한 번만: 설치
 
 1. [Node.js](https://nodejs.org) LTS 버전 설치
