@@ -1,0 +1,20 @@
+{
+  "_설명": "이 파일은 예시입니다(파일명이 _로 시작하면 렌더링에서 제외). 복사해서 content/posts/day31.json 처럼 저장하세요. **강조** = 강조색, \\n = 줄바꿈",
+  "id": "day31",
+  "day": 31,
+  "series": "오해 vs 사실",
+  "title": "관리용 제목 (이미지에는 안 나옴)",
+  "slides": [
+    { "type": "cover", "tag": "오해 vs 사실", "title": "표지 제목\n**강조할 단어**", "sub": "부제 한두 줄" },
+    { "type": "myth", "myth": "흔한 오해 문장", "fact": "사실 문장", "note": "(선택) 보충 설명" },
+    { "type": "text", "label": "(선택) 작은 라벨", "heading": "소제목", "body": ["문단 1", "문단 2"], "note": "(선택)" },
+    { "type": "list", "heading": "목록 제목", "items": [{ "title": "항목", "desc": "설명(선택)" }, "설명 없는 항목"], "style": "(선택) check 로 쓰면 체크 표시" },
+    { "type": "table", "heading": "수치 표", "rows": [{ "label": "정상", "value": "100 미만", "tone": "ok" }, { "label": "주의", "value": "100~125", "tone": "warn" }, { "label": "위험", "value": "126 이상", "tone": "bad" }] },
+    { "type": "compare", "heading": "비교 제목", "left": { "title": "이것 대신", "items": ["A", "B"] }, "right": { "title": "이렇게", "items": ["C", "D"] } },
+    { "type": "recipe", "heading": "요리 이름", "meta": "1인분 · 15분", "ingredients": ["재료1", "재료2"], "steps": ["1단계", "2단계"] },
+    { "type": "end", "summary": ["핵심 1", "핵심 2", "핵심 3"], "question": "(선택) 댓글 유도 문구", "source": "출처" }
+  ],
+  "caption": "인스타그램 본문",
+  "hashtags": ["당뇨", "혈당관리", "당뇨식단"],
+  "check": "업로드 전에 확인할 점 (미리보기 페이지에 표시됨)"
+}
