@@ -7,6 +7,8 @@
 원고 작성(AI 초안 + 사실 확인)  →  npm run build  →  output/dayNN/01.png ~ + caption.txt  →  예약 업로드
 ```
 
+> 📘 **처음이라면 `docs/혈당노트_사용설명서.pdf`부터 보세요.** (설치 없이 쓰는 법 포함, 7쪽)
+
 ## 1. 처음 한 번만: 설치
 
 1. [Node.js](https://nodejs.org) LTS 버전 설치
@@ -23,7 +25,10 @@ npm run build                 # 전체 원고 → 이미지
 npm run build -- day05        # 특정 원고만
 npm run build -- day05 day06  # 여러 개
 npm run check                 # 이미지 없이 원고 형식만 검사
+npm run reels -- day05        # 릴스 영상(1080×1920, 9:16) 만들기
 ```
+
+- 릴스: `output/day05/reel.mp4` + `reel_cover.png`. 카드가 옆으로 넘어가는 15~20초 영상이며, **소리는 없습니다**(인스타그램 앱에서 음악 추가). 장당 시간은 `scripts/render-reels.mjs`의 `SEC`에서 바꿉니다.
 
 - 결과: `output/day05/01.png, 02.png …` (1080×1350, 인스타그램 세로형 4:5)
 - 같은 폴더의 `caption.txt` = 본문 + 면책 문구 + 해시태그 (복사해서 붙여 넣기)
@@ -113,7 +118,12 @@ content/_template.json     새 원고 형식 예시
 CALENDAR.md                30일 캘린더 한눈에 보기
 prompts/                   AI 원고 작성 프롬프트
 templates/card.css         카드 디자인
-scripts/render.mjs         이미지 생성 스크립트
+scripts/render.mjs         카드 이미지 생성
+scripts/render-reels.mjs   릴스 영상 생성
+scripts/render-profile.mjs 프로필 사진 생성
+scripts/make-manual.mjs    사용설명서 PDF 생성
+docs/                      사용설명서 (PDF + 원본 HTML)
+profile/                   프로필 사진·소개글
 samples/                   결과 이미지 샘플
 output/                    생성된 이미지 (git에는 올리지 않음)
 ```
