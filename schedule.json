@@ -2,7 +2,16 @@
   "_설명": "자동 업로드 일정. Day N은 firstDate + (N - firstDay)일에 올라갑니다. 잠시 멈추려면 paused를 true로.",
   "paused": false,
   "timezone": "Asia/Seoul",
-  "carousel": { "firstDay": 2, "firstDate": "2026-11-26", "time": "07:30" },
-  "reel": { "firstDay": 1, "firstDate": "2026-11-26", "time": "20:30" },
-  "graphApiVersion": "v23.0"
+  "carousel": {
+    "firstDay": 2,
+    "firstDate": "2026-11-26",
+    "time": "07:30"
+  },
+  "reel": {
+    "firstDay": 1,
+    "firstDate": "2026-11-26",
+    "time": "20:30"
+  },
+  "graphApiVersion": "v23.0",
+  "igUserId": "17841429304915652"
 }

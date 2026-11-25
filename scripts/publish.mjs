@@ -16,7 +16,7 @@ const sched = JSON.parse(fs.readFileSync(path.join(ROOT, 'schedule.json'), 'utf8
 const MEDIA = path.join(ROOT, '.media');
 const TARGET = path.join(MEDIA, 'target.json');
 const LOG = path.join(ROOT, 'published.json');
-const API = `https://graph.instagram.com/${sched.graphApiVersion}`;
+let API = `https://graph.instagram.com/${sched.graphApiVersion}`; // EAA 로 시작하는 토큰이면 graph.facebook.com 사용
 
 const [cmd, ...rest] = process.argv.slice(2);
 const opt = (name) => { const i = rest.indexOf(`--${name}`); return i >= 0 ? rest[i + 1] : undefined; };
@@ -130,15 +130,27 @@ async function publish() {
   if (!TOKEN) fail('IG_ACCESS_TOKEN 이 없습니다. GitHub 저장소 Settings → Secrets 에 등록하세요.');
   if (!base) fail('MEDIA_BASE_URL 이 없습니다.');
 
-  // 토큰 연장 (발급 24시간 이후부터 가능, 실패해도 계속 진행)
-  try {
+  // 토큰 종류: IGAA… = 인스타그램 로그인 토큰 / EAA… = 통합 로그인(시스템 사용자) 토큰
+  const fbToken = TOKEN.startsWith('EAA');
+  if (fbToken) API = `https://graph.facebook.com/${sched.graphApiVersion}`;
+  console.log(`토큰 종류: ${fbToken ? '통합 로그인(만료 없음)' : '인스타그램 로그인'} · 앞 4글자 ${TOKEN.slice(0, 4)} · 길이 ${TOKEN.length}`);
+
+  // 인스타그램 로그인 토큰만 연장 (발급 24시간 이후부터 가능, 실패해도 계속 진행)
+  if (!fbToken) try {
     const r = await api('GET', 'https://graph.instagram.com/refresh_access_token', { grant_type: 'ig_refresh_token' });
     console.log(`토큰 유효기간: 약 ${Math.round(r.expires_in / 86400)}일 남음`);
     if (r.access_token && r.access_token !== TOKEN) console.log('::warning::토큰이 새로 발급되었습니다. GitHub Secrets 의 IG_ACCESS_TOKEN 을 갱신해야 할 수 있습니다.');
   } catch (e) { console.log(`토큰 연장 건너뜀: ${e.message}`); }
 
-  const me = await api('GET', '/me', { fields: 'user_id,username' });
-  const ig = me.user_id || me.id;
+  let ig, me;
+  if (fbToken) {
+    ig = process.env.IG_USER_ID || sched.igUserId;
+    if (!ig) fail('schedule.json 에 igUserId 가 없습니다');
+    me = await api('GET', `/${ig}`, { fields: 'username' });
+  } else {
+    me = await api('GET', '/me', { fields: 'user_id,username' });
+    ig = me.user_id || me.id;
+  }
   console.log(`계정: @${me.username} → ${t.kind} ${t.id} "${t.title}" 게시 시작`);
 
   let creationId;
