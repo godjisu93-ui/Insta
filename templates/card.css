@@ -37,6 +37,13 @@ h2 { font-size: 64px; line-height: 1.3; font-weight: 800; letter-spacing: -0.02e
 .swipe { margin-top: 70px; font-size: 30px; font-weight: 600; color: rgba(255,255,255,.75); }
 .swipe .arrow { display: inline-block; margin-left: 8px; }
 .type-cover main { justify-content: flex-end; padding-bottom: 40px; }
+/* 크림색 표지 */
+.type-cover.light::before { content: ''; position: absolute; right: -220px; top: -220px; width: 640px; height: 640px; border-radius: 50%; background: var(--primary); opacity: .09; }
+.type-cover.light::after { content: ''; position: absolute; left: -160px; bottom: -260px; width: 520px; height: 520px; border-radius: 50%; background: var(--highlightOnDark); opacity: .35; }
+.type-cover.light .cover-tag { color: var(--primary); }
+.type-cover.light .cover-title { color: var(--ink); }
+.type-cover.light .cover-sub { color: var(--sub); }
+.type-cover.light .swipe { color: var(--sub); }
 
 /* list */
 .items { list-style: none; display: flex; flex-direction: column; gap: 26px; }

@@ -123,7 +123,9 @@ function slideBody(s) {
 }
 
 function slideHtml(post, s, i, n) {
-  const dark = s.type === 'cover' || s.type === 'end' || s.theme === 'dark';
+  // 표지 색: brand.json 의 coverPattern 이 "alternate" 면 짝수 Day 는 크림색 표지 (피드 체크무늬용)
+  const lightCover = post.coverTheme ? post.coverTheme === 'light' : brand.coverPattern === 'alternate' && Number.isInteger(post.day) && post.day % 2 === 0 && post.day > 0;
+  const dark = s.theme ? s.theme === 'dark' : (s.type === 'cover' && !lightCover) || s.type === 'end';
   const c = brand.colors;
   const vars = Object.entries(c).map(([k, v]) => `--${k}:${v};`).join('');
   const font = (w, f) => `@font-face{font-family:'Pretendard';font-weight:${w};src:url('${pathToFileURL(path.join(fontDir, `Pretendard-${f}.woff2`)).href}') format('woff2');}`;

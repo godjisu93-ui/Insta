@@ -66,12 +66,48 @@ const frameHtml = (post, i, n) => {
   <div class="bottom">${i === n - 1 ? '<span>저장</span>하고 가족에게 <span>공유</span>해 주세요' : '화면을 꾹 누르면 멈춰서 읽을 수 있어요'}</div>`;
 };
 
+// 릴스 표지: 크림색 배경 (피드에서 카드뉴스의 진한 초록 표지와 번갈아 보여 체크무늬가 됨)
+// 피드 격자에서는 가운데 3:4(1080x1440, 위아래 240px 잘림)만 보이므로 글자는 그 안에 둔다.
+const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const md = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, `<em>$1</em>`).replace(/\n/g, '<br>');
+const coverHtml = (post) => {
+  const cover = post.slides.find((s) => s.type === 'cover') || {};
+  const secs = post.slides.reduce((a, s) => a + (SEC[s.type] ?? SEC.default), 0);
+  return `<!doctype html><meta charset="utf-8"><style>${font(600, 'SemiBold')}${font(800, 'ExtraBold')}${font(900, 'Black')}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:1080px;height:1920px;background:${c.bg};font-family:Pretendard,sans-serif;position:relative;overflow:hidden;color:${c.ink};word-break:keep-all}
+  .b1{position:absolute;width:760px;height:760px;border-radius:50%;background:${c.primary};opacity:.10;right:-300px;top:120px}
+  .b2{position:absolute;width:560px;height:560px;border-radius:50%;background:${c.highlightOnDark};opacity:.35;left:-240px;bottom:180px}
+  .safe{position:absolute;top:240px;left:0;right:0;height:1440px;padding:110px 96px;display:flex;flex-direction:column;justify-content:center}
+  .chip{align-self:flex-start;display:flex;gap:14px;align-items:center;font-size:34px;font-weight:800;color:#fff;background:${c.primary};padding:14px 30px;border-radius:99px;margin-bottom:56px}
+  h1{font-size:112px;line-height:1.2;font-weight:900;letter-spacing:-.035em;margin-bottom:44px}
+  em{font-style:normal;color:${c.accent}}
+  p{font-size:42px;line-height:1.5;font-weight:600;color:${c.sub}}
+  .foot{margin-top:80px;display:flex;justify-content:space-between;font-size:32px;font-weight:800;color:${c.primary};border-top:3px solid ${c.line};padding-top:30px}
+  </style><div class="b1"></div><div class="b2"></div>
+  <div class="safe">
+    <div class="chip">▶ ${esc(post.series || '릴스')}</div>
+    <h1>${md(cover.title || post.title)}</h1>
+    ${cover.sub ? `<p>${md(cover.sub)}</p>` : ''}
+    <div class="foot"><span>${esc(brand.handle)}</span><span>${Math.round(secs)}초 요약</span></div>
+  </div>`;
+};
+const coverOnly = process.argv.includes('--cover-only');
+
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
 const tmp = path.join(OUT_DIR, '.reel.html');
 
 for (const post of targets) {
   const dir = path.join(OUT_DIR, post.id);
+  const creamCover = brand.reelCover === 'cream' || coverOnly;
+  if (creamCover) {
+    fs.writeFileSync(tmp, coverHtml(post));
+    await page.goto(pathToFileURL(tmp).href);
+    await page.evaluate(() => document.fonts.ready);
+    await page.screenshot({ path: path.join(dir, 'reel_cover.png') });
+  }
+  if (coverOnly) { console.log(`✓ ${post.id} 릴스 표지`); continue; }
   const frameDir = path.join(dir, 'reel_frames');
   fs.rmSync(frameDir, { recursive: true, force: true });
   fs.mkdirSync(frameDir, { recursive: true });
@@ -99,7 +135,7 @@ for (const post of targets) {
   filter += `${last}format=yuv420p[out]`;
   args.push('-filter_complex', filter, '-map', '[out]', '-r', '30', '-c:v', 'libx264', '-preset', 'medium', '-crf', '20', '-movflags', '+faststart', '-an', path.join(dir, 'reel.mp4'));
   execFileSync(FFMPEG, args, { stdio: 'inherit' });
-  fs.copyFileSync(frames[0], path.join(dir, 'reel_cover.png'));
+  if (!creamCover) fs.copyFileSync(frames[0], path.join(dir, 'reel_cover.png'));
   fs.rmSync(frameDir, { recursive: true, force: true });
   console.log(`✓ ${post.id} 릴스 ${dur.reduce((a, b) => a + b, 0).toFixed(1)}초 → output/${post.id}/reel.mp4`);
 }
