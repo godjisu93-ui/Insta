@@ -17,5 +17,6 @@
     "warn": "#E9A23B",
     "bad": "#DE5845"
   },
-  "_표지설정": "coverPattern: \"alternate\" 면 짝수 Day 카드 표지가 크림색 / reelCover: \"cream\" 이면 릴스 표지가 크림색 (둘 다 없으면 기본 초록)"
+  "_표지설정": "coverPattern: \"alternate\" 면 짝수 Day 카드 표지가 크림색 / reelCover: \"cream\" 이면 릴스 표지가 크림색 (둘 다 없으면 기본 초록)",
+  "coverPattern": "alternate"
 }

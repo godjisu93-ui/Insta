@@ -158,7 +158,8 @@ async function publish() {
     await waitReady(creationId, 300000);
   } else {
     await waitUrl(url('reel_cover.jpg'));
-    const common = { media_type: 'REELS', caption: t.caption, share_to_feed: 'true', cover_url: url('reel_cover.jpg') };
+    // share_to_feed false: 릴스는 프로필 격자에 넣지 않고 릴스 탭·추천에만 (피드 체크무늬 유지)
+    const common = { media_type: 'REELS', caption: t.caption, share_to_feed: 'false', cover_url: url('reel_cover.jpg') };
     const video = fs.readFileSync(path.join(MEDIA, t.id, 'reel.mp4'));
     try {
       // 영상 파일을 직접 업로드 (공개 주소 불필요)
