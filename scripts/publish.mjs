@@ -83,7 +83,7 @@ function prepare() {
 }
 
 // ---------------- publish ----------------
-const TOKEN = process.env.IG_ACCESS_TOKEN;
+const TOKEN = (process.env.IG_ACCESS_TOKEN || '').trim().replace(/^['"]|['"]$/g, '');
 async function api(method, endpoint, params = {}) {
   const url = new URL(endpoint.startsWith('http') ? endpoint : API + endpoint);
   const body = new URLSearchParams({ ...params, access_token: TOKEN });
