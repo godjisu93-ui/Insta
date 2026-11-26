@@ -20,7 +20,7 @@ let FFMPEG = 'ffmpeg';
 try { const p = require('ffmpeg-static'); if (p && fs.existsSync(p)) FFMPEG = p; } catch {}
 
 // 장당 보여 주는 시간(초)
-const SEC = { cover: 2.5, end: 3.0, default: 4.0 };
+const SEC = { cover: 2.5, end: 3.5, default: 5.0 }; // 본문은 장당 5초 (읽을 시간 확보)
 const FADE = 0.45;
 
 // 원고 목록 (render.mjs와 같은 방식으로 읽기)
@@ -63,7 +63,7 @@ const frameHtml = (post, i, n) => {
   <div class="bars">${bars}</div>
   <div class="top"><b>${brand.accountName}</b><span>${post.series || ''}</span></div>
   <div class="card"><img src="${card}"></div>
-  <div class="bottom">${i === n - 1 ? '<span>저장</span>하고 가족에게 <span>공유</span>해 주세요' : '화면을 꾹 누르면 멈춰서 읽을 수 있어요'}</div>`;
+  <div class="bottom">${i === n - 1 ? '<span>저장</span>하고 가족에게 <span>공유</span>해 주세요' : '<span>저장</span>해 두면 언제든 다시 볼 수 있어요'}</div>`;
 };
 
 // 릴스 표지: 크림색 배경 (피드에서 카드뉴스의 진한 초록 표지와 번갈아 보여 체크무늬가 됨)
