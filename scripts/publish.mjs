@@ -66,7 +66,7 @@ function prepare() {
   const src = path.join(ROOT, 'output', id);
   const dst = path.join(MEDIA, id);
   fs.mkdirSync(dst, { recursive: true });
-  const jpg = (from, to) => execFileSync(ffmpeg, ['-y', '-loglevel', 'error', '-i', from, '-q:v', '2', to]);
+  const jpg = (from, to) => execFileSync(ffmpeg, ['-y', '-loglevel', 'error', '-i', from, '-pix_fmt', 'yuvj420p', '-q:v', '2', to]);
   const images = [];
   if (kind === 'carousel') {
     for (const f of fs.readdirSync(src).filter((f) => /^\d+\.png$/.test(f)).sort()) {
