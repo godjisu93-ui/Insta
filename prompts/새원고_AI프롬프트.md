@@ -35,13 +35,27 @@ id: [dayNN]
     { "type": "table", "heading": "...", "rows": [{ "label": "...", "value": "...", "tone": "ok|warn|bad|info" }], "note": "..." },
     { "type": "compare", "heading": "...", "left": { "title": "...", "items": [] }, "right": { "title": "...", "items": [] } },
     { "type": "recipe", "heading": "...", "meta": "1인분 · 15분", "ingredients": [], "steps": [] },
-    { "type": "end", "summary": ["...", "...", "..."], "question": "(선택)", "source": "..." }
+    { "type": "end", "summary": ["...", "...", "..."], "question": "(선택)", "source": "..." },
+    { "type": "quiz", "question": "...?", "hint": "(선택) 정답은 다음 장에 있어요 →" },
+    { "type": "answer", "answer": "O 또는 X", "heading": "...", "body": ["..."], "note": "(선택)" },
+    { "type": "poster", "tag": "(선택) 냉장고에 붙여 두세요", "heading": "...", "chips": ["(선택) 짧은 키워드"], "steps": [{ "title": "...", "desc": "..." }], "warn": "(선택) 빨간 경고 한 줄", "source": "..." }
   ],
   "caption": "...", "hashtags": ["..."], "check": "사람이 확인할 점"
 }
 ```
 
 ---
+
+## 형식 섞기 규칙 (2026-11 적용)
+
+| 요일 슬롯 | 형식 |
+|---|---|
+| 월 · 오해 vs 사실 | **격주로 O/X 퀴즈**: 직전 월요일 슬롯이 '오해 vs 사실'이었으면 이번엔 퀴즈 (series: "O/X 퀴즈") |
+| 일 · 한 주 정리 | **한 장 포스터** (series: "한 장 포스터", slides 1장, type "poster") |
+| 나머지 | 기존과 동일 |
+
+- **O/X 퀴즈** 구성: cover → quiz(문제) → answer(정답+설명) → (선택) table/list → end. 캡션 첫 줄은 질문, "정답 보기 전에 댓글로 O/X!"로 댓글 유도. 정답을 캡션에 쓰지 말 것.
+- **한 장 포스터**: 그 주에 다룬 주제 중 **저장·인쇄할 가치가 큰 것**(대처법, 기준표, 고르는 법)을 한 장에. steps 3~4개, 각 desc 한 줄. 출처는 poster의 source에.
 
 ## 한 번에 일주일치 만들기
 

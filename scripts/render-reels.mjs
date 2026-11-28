@@ -20,7 +20,7 @@ let FFMPEG = 'ffmpeg';
 try { const p = require('ffmpeg-static'); if (p && fs.existsSync(p)) FFMPEG = p; } catch {}
 
 // 장당 보여 주는 시간(초)
-const SEC = { cover: 2.5, end: 3.5, default: 5.0 }; // 본문은 장당 5초 (읽을 시간 확보)
+const SEC = { cover: 2.5, end: 3.5, poster: 9.0, quiz: 4.0, default: 5.0 }; // 본문은 장당 5초 (읽을 시간 확보)
 const FADE = 0.45;
 
 // 원고 목록 (render.mjs와 같은 방식으로 읽기)
