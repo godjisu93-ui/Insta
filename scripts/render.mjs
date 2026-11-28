@@ -10,7 +10,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTENT_DIR = path.join(ROOT, 'content');
+const dirArg = process.argv.indexOf('--dir');
+const CONTENT_DIR = dirArg > 0 ? path.resolve(ROOT, process.argv[dirArg + 1]) : path.join(ROOT, 'content');
 const OUT_DIR = path.join(ROOT, 'output');
 const W = 1080, H = 1350;
 
@@ -42,7 +43,7 @@ function loadPosts() {
 const TYPES = {
   cover: ['title'], text: ['heading', 'body'], list: ['heading', 'items'], myth: ['myth', 'fact'],
   table: ['heading', 'rows'], compare: ['heading', 'left', 'right'], recipe: ['heading', 'ingredients', 'steps'],
-  end: ['summary'],
+  end: ['summary'], quiz: ['question'], answer: ['answer', 'heading'], poster: ['heading', 'steps'],
 };
 
 function validate(posts) {
@@ -111,6 +112,25 @@ function slideBody(s) {
           <div class="ing"><div class="col-title">재료</div><ul>${s.ingredients.map((x) => `<li>${md(x)}</li>`).join('')}</ul></div>
           <div class="steps"><div class="col-title">만드는 법</div><ol>${s.steps.map((x, i) => `<li><span class="num">${i + 1}</span><div>${md(x)}</div></li>`).join('')}</ol></div>
         </div>${s.note ? `<div class="note">${md(s.note)}</div>` : ''}`;
+    case 'quiz':
+      return `<div class="q-label">Q.</div><h2 class="q-text">${md(s.question)}</h2>
+        <div class="ox"><div class="o">O</div><div class="x">X</div></div>
+        <div class="q-hint">${md(s.hint || '정답은 다음 장에 있어요 →')}</div>`;
+    case 'answer':
+      return `<div class="a-row"><div class="a-badge ${s.answer === 'O' ? 'o' : 'x'}">${esc(s.answer)}</div>
+        <div class="a-label">정답은<br><b>${esc(s.answer)}</b>예요</div></div>
+        <h2>${md(s.heading)}</h2>${s.body ? `<div class="body">${paras(s.body)}</div>` : ''}
+        ${s.note ? `<div class="note">${md(s.note)}</div>` : ''}`;
+    case 'poster':
+      return `<div class="p-tag">${md(s.tag || '냉장고에 붙여 두세요')}</div>
+        <h2 class="p-title">${md(s.heading)}</h2>
+        ${s.chips ? `<div class="p-chips">${s.chips.map((c) => `<span>${md(c)}</span>`).join('')}</div>` : ''}
+        <div class="p-steps">${s.steps.map((st, k) => {
+          const t = typeof st === 'string' ? { title: st } : st;
+          return `<div class="p-step"><div class="p-n">${k + 1}</div><div><b>${md(t.title)}</b>${t.desc ? `<span>${md(t.desc)}</span>` : ''}</div></div>`;
+        }).join('')}</div>
+        ${s.warn ? `<div class="p-warn">${md(s.warn)}</div>` : ''}
+        ${s.source ? `<div class="p-src">출처 · ${md(s.source)} · ${md(brand.disclaimer)}</div>` : ''}`;
     case 'end':
       return `<h2>${md(s.heading || '오늘의 핵심 정리')}</h2>
         <ul class="summary">${s.summary.map((x) => `<li><span class="tick">✓</span><div>${md(x)}</div></li>`).join('')}</ul>
@@ -133,7 +153,7 @@ function slideHtml(post, s, i, n) {
     ${font(400, 'Regular')}${font(500, 'Medium')}${font(600, 'SemiBold')}${font(700, 'Bold')}${font(800, 'ExtraBold')}${font(900, 'Black')}
     :root{${vars}} ${css}</style></head><body>
     <div class="slide type-${s.type} ${dark ? 'dark' : 'light'}">
-      <header><span class="chip">${md(s.type === 'cover' ? brand.accountName : (post.series || brand.accountName))}</span><span class="pg">${i + 1} / ${n}</span></header>
+      <header><span class="chip">${md(s.type === 'cover' ? brand.accountName : (post.series || brand.accountName))}</span><span class="pg">${n > 1 ? `${i + 1} / ${n}` : ''}</span></header>
       <main><div class="inner">${slideBody(s)}</div></main>
       <footer><span class="handle">${esc(brand.handle)}</span><span class="cta">${i === n - 1 ? '저장 · 공유로 가족에게 알려 주세요' : md(brand.footerText)}</span></footer>
     </div></body></html>`;
@@ -152,7 +172,7 @@ async function fitContent(page) {
 // ---------- 실행 ----------
 const args = process.argv.slice(2);
 const checkOnly = args.includes('--check');
-const only = args.filter((a) => !a.startsWith('--'));
+const only = args.filter((a, i) => !a.startsWith('--') && args[i - 1] !== '--dir');
 
 const posts = loadPosts();
 const errors = validate(posts);
